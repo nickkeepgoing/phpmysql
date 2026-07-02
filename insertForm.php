@@ -18,6 +18,25 @@
             <label for="lastname">นามสกุล</label>
             <input type="text" name="lname" id="" class="form-control">
         </div>
+				
+				<div class="form-group mb-3">
+						<label for="gender" class="form-check-label">เพศ</label>
+						<br>
+
+						<input type="radio" name="gender" id="" class="form-check-input" value="male">ชาย
+						<input type="radio" name="gender" id=""  class="form-check-input"value="female">หญิง
+						<input type="radio" name="gender" id=""  class="form-check-input"value="gay">เก
+				</div>
+
+				<div class="form-group mb-3">
+						<label for="skill" class="form-check-label">Skills</label>
+						<br>
+
+						<input type="checkbox" class="form-check-input" name="skills[]" id=""  value="HTML">HTML
+						<input type="checkbox" class="form-check-input" name="skills[]" id=""  value="CSS">CSS
+						<input type="checkbox" class="form-check-input" name="skills[]" id=""  value="JAVASCRIPT">JAVASCRIPT
+						<input type="checkbox" class="form-check-input" name="skills[]" id=""  value="Arduino">Arduino
+				</div>
 
         <input type="submit" value="submit" class="btn btn-success">
         <input type="reset" value="clear data" class="btn btn-danger">
