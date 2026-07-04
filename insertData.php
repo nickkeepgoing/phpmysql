@@ -6,12 +6,20 @@ echo "last name = ".$_POST["lname"]."<br>";
 $fname = $_POST["fname"];
 $lname = $_POST["lname"];
 $gender = $_POST["gender"];
-$skills = implode(",",$_POST["skills"]);
+
+if (!empty($_POST["skills"])){
+	$skills = implode(",",$_POST["skills"]);
+}else{
+	$skills = "none";
+}
+
+
 $sql = "INSERT INTO employee(fname,lname,gender,skills) VALUES('$fname','$lname','$gender','$skills')";
 
 $result = mysqli_query($con,$sql);
 if($result){
-	echo "Save data success"."<br>";
+	header("location:index.php")	;
+	exit(0);
 }else{
 	echo mysqli_errors($con);
 }
