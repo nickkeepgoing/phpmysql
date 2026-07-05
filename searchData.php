@@ -1,13 +1,14 @@
 <?php
-
 require("dbconnect.php");
 
-$sql = "SELECT * FROM employee ORDER BY fname ASC";
-$result = mysqli_query($con, $sql);
+$findname = $_POST["findname"];
 
+$sql = "SELECT * FROM employee WHERE fname LIKE '%$findname%' ORDER BY fname ASC";
+$result = mysqli_query($con, $sql);
 $count = mysqli_num_rows($result);
 $order = 1;
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -86,7 +87,7 @@ $order = 1;
             </div>
         <?php } ?>
 
-        <a href="insertForm.php" class="btn btn-success mt-3">บันทึกข้อมูลพนักงาน</a>
+        <a href="index.php" class="btn btn-success mt-3">Back</a>
 
     </div>
 </body>
