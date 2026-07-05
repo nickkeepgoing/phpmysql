@@ -2,10 +2,11 @@
 
 require("dbconnect.php");
 
-$sql = "SELECT * FROM employee";
-$result = mysqli_query($con,$sql);
+$sql = "SELECT * FROM employee ORDER BY fname ASC";
+$result = mysqli_query($con, $sql);
 
-$count=mysqli_num_rows($result);
+$count = mysqli_num_rows($result);
+$order = 1;
 ?>
 
 <!DOCTYPE html>
@@ -19,66 +20,89 @@ $count=mysqli_num_rows($result);
 <body>
     <div class="container p-3">
 
-        <?php if ($count > 0 ){?>
+        <?php if ($count > 0) { ?>
             <h1 class="text-center">ข้อมูลพนักงาน</h1>
             <hr>
+
+            <!-- ฟอร์มที่ 1: ลบด้วยการพิมพ์ id -->
             <form action="deleteTextField.php" class="form-group mb-3" method="POST">
                 <label for="">Employee Id</label>
                 <input type="text" class="form-control" placeholder="Input employee id to delete" name="idemployee">
                 <input type="submit" value="delete data" class="btn btn-danger my-2">
             </form>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>รหัสพนักงงาน</th>
-                        <th>ชื่อ</th>
-                        <th>นามสกุล</th>
-                        <th>เพศ</th>
-                        <th>ทักษะ</th>
-                        <th>ลบข้อมูล</th>
-                        <th>Select</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php while($row = mysqli_fetch_assoc($result)){?>
+
+            <!-- ฟอร์มที่ 2: ลบหลายรายการ ต้อง "ครอบทั้งตาราง" -->
+            <form action="multipleDelete.php" method="POST">
+                <table class="table table-bordered">
+                    <thead>
                         <tr>
-                            <td><?php echo $row["id"]?></td>
-                            <td><?php echo $row["fname"]?></td>
-                            <td><?php echo $row["lname"]?></td>
-                            <td>
-                                <?php if ($row["gender"] == "male"){?>
-                                    ชาย
-                                <?php }else if ($row["gender"] == "female"){?>
-                                    หญิง
-                                <?php }?>
-                        
-                            </td>
-                            <td><?php echo $row["skills"]?></td>
-                            <td><a href="deleteQueryString.php?idemp=<?php echo $row["id"];?>" onclick="return confirm('Are you sure to delete?')" class="btn btn-danger">Delete</a></td>
-
-                            <form action="multipleDelete.php" method="POST">
-                                  <td><input type="checkbox" class="form-check-input" name="idcheckbox[]" value="<?php echo $row["id"];?>"></td>
-
-                          
+                            <th>รหัสพนักงงาน</th>
+                            <th>ชื่อ</th>
+                            <th>นามสกุล</th>
+                            <th>เพศ</th>
+                            <th>ทักษะ</th>
+                            <th>แก้ไขข้อมูล</th>
+                            <th>ลบข้อมูล</th>
+                            <th>Select</th>
                         </tr>
-                    <?php }?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                            <tr>
+                                <td><?php echo $order++; ?></td>
+                                <td><?php echo $row["fname"]; ?></td>
+                                <td><?php echo $row["lname"]; ?></td>
+                                <td>
+                                    <?php if ($row["gender"] == "male") { ?>
+                                        ชาย
+                                    <?php } else if ($row["gender"] == "female") { ?>
+                                        หญิง
+                                    <?php } ?>
+                                </td>
+                                <td><?php echo $row["skills"]; ?></td>
+                                <td><a href="editform.php?id=<?php echo $row["id"];?>" class="btn btn-primary">Edit</a></td>
+                                <td>
+                                    <a href="deleteQueryString.php?idemp=<?php echo $row["id"]; ?>"
+                                       onclick="return confirm('Are you sure to delete?')"
+                                       class="btn btn-danger">Delete</a>
+                                </td>
+                                <td>
+                                    <input type="checkbox" class="form-check-input"
+                                           name="idcheckbox[]" value="<?php echo $row["id"]; ?>">
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
 
-        <?php }else{ ?>
+                <input type="submit" value="ลบข้อมูล" class="btn btn-danger">
+                <button type="button" class="btn btn-primary" onclick="checkAll()">เลือกทั้งหมด</button>
+                <button type="button" class="btn btn-warning" onclick="uncheckAll()">ยกเลิก</button>
+            </form>
+
+        <?php } else { ?>
             <div class="alert alert-primary">
                 ไม่มีข้อมูลพนักงาน
             </div>
-        <?php }?>
-        
-        <a href="insertForm.php" class="btn btn-success">บันทึกข้อมูลพนักงาน</a>
-        <input type="submit" value="delete data" class="btn btn-danger">
-        </form>
+        <?php } ?>
+
+        <a href="insertForm.php" class="btn btn-success mt-3">บันทึกข้อมูลพนักงาน</a>
 
     </div>
-   
-
-    
-    
 </body>
+<script>
+    function checkAll() {
+        var checkboxes = document.getElementsByName('idcheckbox[]');
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = true;
+        }
+    }
+
+    function uncheckAll() {
+        var checkboxes = document.getElementsByName('idcheckbox[]');
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = false;
+        }
+    }
+</script>
 </html>
